@@ -42,7 +42,6 @@ namespace BlueprintEditor2
                 }
                 catch
                 {
-                    Logger.Add("Name write error");
                 }
             }
         }

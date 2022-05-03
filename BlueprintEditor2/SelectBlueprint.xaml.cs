@@ -33,24 +33,19 @@ namespace BlueprintEditor2
 
         public SelectBlueprint()
         {
-            Logger.Add("Startup");
 #if DEBUG
             System.Diagnostics.PresentationTraceSources.DataBindingSource.Switch.Level = System.Diagnostics.SourceLevels.Critical;
 #endif
             Thread.CurrentThread.Name = "Main";
-            Logger.Add("Deserializing settings");
             MySettings.Deserialize();
             new Task(() => {
                 ArmorReplaceClass.Deserialize();
             }).Start();
-            Logger.Add("Apply culture settings");
             MySettings.Current.ApplySettings();
             window = this;
-            Logger.Add("Get arguments");
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length > 1)
             {
-                Logger.Add("Processing arguments");
                 foreach (var arg in args)
                 {
                     switch (arg)
@@ -70,20 +65,16 @@ namespace BlueprintEditor2
                     }
                 }
             }
-            Logger.Add("Handle unhandled");
             Logger.HandleUnhandledException();
 
-            Logger.Add("Init GUI");
             InitializeComponent();
             currentBluePatch = MySettings.Current.BlueprintPatch;
-            Logger.Add("Init blueprints");
             InitBlueprints();
 #if false
 #else
             new Task(() =>
             {
                 Thread.CurrentThread.Name = "Updating";
-                Logger.Add("Check Update");
                 string downloadURL = null, lastVersion, git_ingo;
                 using (var client = new System.Net.WebClient())
                 {
@@ -97,25 +88,20 @@ namespace BlueprintEditor2
                 {
                     if (MyExtensions.CheckVersion(lastVersion, MyExtensions.Version))
                     {
-                        Logger.Add("Update found");
                         MyExtensions.AsyncWorker(() => new UpdateAvailable(lastVersion, downloadURL, git_ingo).Show());
                     }
                     else
                     {
-                        Logger.Add("Update not found on GitHub");
                     }
                 }
                 else
                 {
-                    Logger.Add("No have access to GitHub");
                 }
             }).Start();
 #endif
-            Logger.Add("Finish Init GUI");
             OldSortBy = FirstSorter;
             if (string.IsNullOrWhiteSpace(MySettings.Current.SteamWorkshopPatch))
             {
-                Logger.Add("Disable steam workshop tools");
                 MenuItem_1_1.IsEnabled = false;
                 MenuItem_2_1.IsEnabled = false;
                 MenuItem_1_2.IsEnabled = false;
@@ -126,14 +112,10 @@ namespace BlueprintEditor2
             Random rnd = new Random();
             Welcome.Content = Lang.Welcome+" "+ (MyExtensions.CheckGameLicense() ?MySettings.Current.UserName.Replace("_", "__") : "Pirate#"+ rnd.Next(90,9999));
             //MessageBox.Show("Hello "+MySettings.Current.UserName);
-            Logger.Add("GUI Loaded");
             new Task(() => {
                 Thread.CurrentThread.Name = "DataParser";
-                Logger.Add("Game data parse start");
                 MyGameData.Init();
-                Logger.Add("Game data parse end");
                 MyExtensions.AsyncWorker(() => {
-                    Logger.Add("Enabling features that use game data");
                     CalculateButton.IsEnabled = BlueList.SelectedIndex != -1;
                     CalculateButton.Content = Lang.Calculate;
                 });
@@ -141,28 +123,22 @@ namespace BlueprintEditor2
         }
         public void SettingsUpdated()
         {
-            Logger.Add("Settings updated(update welcome content)");
             Welcome.Content = Lang.Welcome + " " + MySettings.Current.UserName.Replace("_", "__");
             //ResourceManager.Refresh();
             //MyExtensions.ThemeChange("Dark");
         }
         internal void BlueList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Logger.Add("Blueprint list selected changed");
             MyDisplayBlueprint Selected = (MyDisplayBlueprint)BlueList.SelectedItem;
             if (Selected != null && File.Exists(currentBluePatch + Selected.Name + "\\bp.sbc"))
             {
-                Logger.Add($"Bluerpint '{Selected.Name}' selected");
-                Logger.Add("Load blueprint");
                 CurrentBlueprint = new MyXmlBlueprint(currentBluePatch + Selected.Name);
                 if (MySettings.Current.DontOpenBlueprintsOnScan)
                 {
-                    Logger.Add("Adding inblueprint data to list");
                     Selected.AddXmlData(CurrentBlueprint);
                 }
-                Logger.Add("Load picture");
                 BluePicture.Source = CurrentBlueprint.GetPic();
-                Logger.Add("Write blueprint info");
+
 
                 BlueText.Inlines.Clear();
                 BlueText.Inlines.Add($"{Lang.Blueprint}: {Selected.Name}\r\n" +
@@ -185,19 +161,16 @@ namespace BlueprintEditor2
                 {
                     BlueText.Inlines.Add(Selected.Owner);
                 }
-                Logger.Add("Buttons enabling");
                 CalculateButton.IsEnabled = MyGameData.IsInitialized;
                 EditButton.IsEnabled = true;
                 PrefabButton.IsEnabled = true;
                 BackupButton.IsEnabled = Directory.Exists(CurrentBlueprint.Patch + "/Backups");
-                Logger.Add("Remove binary files");
                 foreach (string file in Directory.GetFiles(CurrentBlueprint.Patch, "bp.sbc*", SearchOption.TopDirectoryOnly))
                 {
                     if (File.Exists(file) && Path.GetFileName(file) != "bp.sbc") File.Delete(file);
                 }
                 if (MySettings.Current.DontOpenBlueprintsOnScan)
                 {
-                    Logger.Add("Update list data");
                     if (OldSortBy != null)
                         GoSort(OldSortBy, null);
                     BlueList.ScrollIntoView(Selected);
@@ -205,20 +178,15 @@ namespace BlueprintEditor2
             }
             else
             {
-                Logger.Add($"Bluerpint unselected");
                 if (BlueList.SelectedIndex != -1) BlueList.Items.Remove(BlueList.SelectedItem);
                 CurrentBlueprint = null;
-                Logger.Add("Clear picture");
                 BluePicture.Source = new BitmapImage(new Uri("pack://application:,,,/Resource/blueprints-textures_00394054.jpg"));
-                Logger.Add("Clear blueprint info");
                 BlueText.Text = Lang.SelectBlue;
-                Logger.Add("Disabling buttons");
                 CalculateButton.IsEnabled = false;
                 EditButton.IsEnabled = false;
                 PrefabButton.IsEnabled = false;
                 BackupButton.IsEnabled = false;
             }
-            Logger.Add("Update form");
             Height++; Height--;
         }
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -242,13 +210,11 @@ namespace BlueprintEditor2
                     CurrentBlueprint.SaveBackup();
                     BackupButton.IsEnabled = true;
                 }
-                Logger.Add($"Open editor for [{CurrentBlueprint.Name}]");
                 EditBlueprint Form = new EditBlueprint(File.Create(CurrentBlueprint.Patch + "/~lock.dat", 256, FileOptions.DeleteOnClose), CurrentBlueprint);
                 Form.Show();
             }
             else
             {
-                Logger.Add($"Try to open editor for [{CurrentBlueprint.Name}], but blueprint locked");
                 new MessageDialog(DialogPicture.warn, "Error", Lang.AlreadyOpened, null, DialogType.Message).Show();
             }
         }
@@ -256,12 +222,10 @@ namespace BlueprintEditor2
         {
             if (!File.Exists(CurrentBlueprint.Patch + "/~lock.dat"))
             {
-                Logger.Add($"Open backups for [{CurrentBlueprint.Name}]");
                 new BackupManager(File.Create(CurrentBlueprint.Patch + "/~lock.dat", 256, FileOptions.DeleteOnClose), CurrentBlueprint).Show();
             }
             else
             {
-                Logger.Add($"Try to open backups for [{CurrentBlueprint.Name}], but blueprint locked");
                 new MessageDialog(DialogPicture.warn, "Error", Lang.AlreadyOpened, null, DialogType.Message).Show();
             }
         }
@@ -276,7 +240,6 @@ namespace BlueprintEditor2
                     //Left = SystemParameters.PrimaryScreenWidth / 2 - ((360 + 800) / 2);
                     //Top = SystemParameters.PrimaryScreenHeight / 2 - (Height / 2);
                 }
-                Logger.Add($"Open calculator for [{CurrentBlueprint.Name}]");
                 Calculator Form = new Calculator(File.Create(CurrentBlueprint.Patch + "/~lock.dat", 256, FileOptions.DeleteOnClose), CurrentBlueprint);
                 try
                 {
@@ -289,7 +252,6 @@ namespace BlueprintEditor2
             }
             else
             {
-                Logger.Add($"Try to open calculator for [{CurrentBlueprint.Name}], but blueprint locked");
                 new MessageDialog(DialogPicture.warn, "Error", Lang.AlreadyOpened, null, DialogType.Message).Show();
             }
         }
@@ -302,39 +264,33 @@ namespace BlueprintEditor2
         {
             if (CurrentBlueprint != null)
             {
-                Logger.Add($"Normalize picture for [{CurrentBlueprint.Name}]");
                 BluePicture.Source = CurrentBlueprint.GetPic(true);
             }
         }
         private void SelectorMenuItemFolder_Click(object sender, RoutedEventArgs e)
         {
-            Logger.Add($"Open blueprints patch ({currentBluePatch})");
             try
             {
                 Process.Start(currentBluePatch);
             }
             catch
             {
-                Logger.Add($"Error open blueprints patch ({currentBluePatch})");
             }
         }
         private void SelectorMenuItemFolder2_Click(object sender, RoutedEventArgs e)
         {
             if (CurrentBlueprint != null)
             {
-                Logger.Add($"Open directory for [{CurrentBlueprint.Name}]");
                 try
                 {
                     Process.Start(CurrentBlueprint.Patch);
                 }
                 catch
                 {
-                    Logger.Add($"Error open directory for [{CurrentBlueprint.Name}]");
                 }
             }
             else
             {
-                Logger.Add("Try to open blueprint directory, but blueprint not selected");
                 new MessageDialog(DialogPicture.attention, "Attention", Lang.SelectBlueForOpen, null, DialogType.Message).Show();
             }
         }
@@ -342,12 +298,10 @@ namespace BlueprintEditor2
         {
             Lock.Height = SystemParameters.PrimaryScreenHeight;
             Lock.DataContext = 0;
-            Logger.Add("Show delete backups attention");
             new MessageDialog(DialogPicture.warn, Lang.UnsafeAction, Lang.ItWillDeleteAllBackps, (Dial) =>
             {
                 if (Dial == DialоgResult.Yes)
                 {
-                    Logger.Add("Delete all backups in folder");
                     foreach (string dir in Directory.GetDirectories(currentBluePatch))
                     {
                         if (Directory.Exists(dir + "\\Backups")) Directory.Delete(dir + "\\Backups", true);
@@ -359,56 +313,47 @@ namespace BlueprintEditor2
         }
         private void WindowsMenuItemAbout_Click(object sender, RoutedEventArgs e)
         {
-            Logger.Add("About window open");
             if (About.LastWindow == null) new About().Show();
             else About.LastWindow.Focus();
         }
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            Logger.Add("Settings window open");
             if (Settings.LastWindow == null) new Settings().Show();
             else Settings.LastWindow.Focus();
         }
         private void MenuFolderItem_Click(object sender, RoutedEventArgs e)
         {
             string folder = ((MenuItem)sender).Header.ToString();
-            Logger.Add($"Open directory [{folder}]");
             string newDir = currentBluePatch + folder + "\\";
             if (Directory.Exists(newDir))
             {
-                Logger.Add("Directory opened");
                 currentBluePatch = newDir;
                 InitBlueprints();
             }
             else
             {
-                Logger.Add("Directory not exists");
                 ((MenuItem)sender).Visibility = Visibility.Collapsed;
             }
         }
         private void MenuBackItem_Click(object sender, RoutedEventArgs e)
         {
-            Logger.Add("Directory go back");
             currentBluePatch = Path.GetDirectoryName(currentBluePatch.TrimEnd('\\')) + "\\";
             InitBlueprints();
         }
         private void MenuHomeItem_Click(object sender, RoutedEventArgs e)
         {
-            Logger.Add("Directory go home");
             currentBluePatch = MySettings.Current.BlueprintPatch;
             InitBlueprints();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Logger.Add("App closing");
             try
             {
                 MySettings.Serialize();
                 ArmorReplaceClass.Serialize();
                 if (UpdateAvailable.window != null && UpdateAvailable.window.IsLoaded)
                 {
-                    Logger.Add("Update windows show");
                     e.Cancel = true;
                     Hide();
                     UpdateAvailable.window.Show();
@@ -416,13 +361,11 @@ namespace BlueprintEditor2
                 }
                 else
                 {
-                    Logger.Add("App closed");
                     Application.Current.Shutdown();
                 }
             }
             catch(Exception ee)
             {
-                Logger.Add($"Error {ee.Message}");
             }
         }
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -438,13 +381,11 @@ namespace BlueprintEditor2
 
         private void Lock_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Logger.Add("Lock pressed");
             switch (Lock.DataContext)
             {
                 case 0:
                     if (MessageDialog.Last != null)
                     {
-                        Logger.Add("Focus on last dialog");
                         MessageDialog.Last.Focus();
                     }
                     break;
@@ -454,7 +395,6 @@ namespace BlueprintEditor2
                     Window wind = (Window)Lock.DataContext;
                     if (wind != null)
                     {
-                        Logger.Add("Focus on locker");
                         wind.Focus();
                     }
                     break;
@@ -464,13 +404,11 @@ namespace BlueprintEditor2
         {
             if (lockly)
             {
-                Logger.Add("Lock main window");
                 Lock.Height = SystemParameters.PrimaryScreenHeight;
                 Lock.DataContext = DataContext;
             }
             else
             {
-                Logger.Add("Unlock main window");
                 Lock.Height = 0;
                 Lock.DataContext = null;
             }
@@ -478,16 +416,13 @@ namespace BlueprintEditor2
         bool BlueprintInitializing = false;
         private void InitBlueprints()
         {
-            Logger.Add("Init Blueprints");
             if (BlueprintInitializing) return;
             BlueprintInitializing = true;
             Title = "SE BlueprintEditor Loading...";
-            Logger.Add("Clear lists");
             FoldersItem.Items.Clear();
             BlueList.Items.Clear();
             if (currentBluePatch != MySettings.Current.BlueprintPatch)
             {
-                Logger.Add("Add back and home buttons to folder menu");
                 MenuItem Fldr = new MenuItem
                 {
                     Header = Lang.GoBack,
@@ -510,7 +445,6 @@ namespace BlueprintEditor2
                 FoldersItem.Items.Add(Fldr2);
             }
             else FoldersItem.IsEnabled = false;
-            Logger.Add("Starting initialize blueprints");
             BitmapImage fldicn = new BitmapImage(new Uri("pack://application:,,,/Resource/img_308586.png"));
             List<MenuItem> foldrmenu = new List<MenuItem>();
             string SerachQuery = Search.Text.ToLower();
@@ -518,18 +452,14 @@ namespace BlueprintEditor2
             {
                 Thread.CurrentThread.Name = "BlueprintInitializer";
                 bool First = true;
-                Logger.Add("Starting paralel inits");
                 ParallelLoopResult status = Parallel.ForEach(Directory.GetDirectories(currentBluePatch), x =>//.OrderBy(x => Path.GetFileName(x))
                 {
                     string feld = Path.GetFileNameWithoutExtension(x);
-                    Logger.Add($"init \"{feld}\" and send to Main thread");
                     MyDisplayBlueprint Elem = MyDisplayBlueprint.FromBlueprint(x);
                     if (Elem is null)
                     {
                         MyExtensions.AsyncWorker(() =>
                         {
-                            
-                            Logger.Add($"Adding folder \"{feld}\" to menu ");
                             if (First && FoldersItem.IsEnabled)
                             {
                                 FoldersItem.Items.Add(new Separator());
@@ -558,19 +488,15 @@ namespace BlueprintEditor2
                              switch (SearchBy.SelectedIndex)
                              {
                                  case 0:
-                                     Logger.Add($"Adding blueprint \"{Elem.Name}\" to list with search by name \"{SerachQuery}\"");
                                      if (!Elem.Name.ToLower().Contains(SerachQuery)) AddIt = false;
                                      break;
                                  case 1:
-                                     Logger.Add($"Adding blueprint \"{Elem.Name}\" to list with search by owner \"{SerachQuery}\"");
                                      if (!Elem.Owner.ToLower().Contains(SerachQuery)) AddIt = false;
                                      break;
                                  case 2:
-                                     Logger.Add($"Adding blueprint \"{Elem.Name}\" to list with search by creation time \"{SerachQuery}\"");
                                      if (!Elem.CreationTimeText.ToLower().Contains(SerachQuery)) AddIt = false;
                                      break;
                                  case 3:
-                                     Logger.Add($"Adding blueprint \"{Elem.Name}\" to list with search by change time \"{SerachQuery}\"");
                                      if (!Elem.LastEditTimeText.ToLower().Contains(SerachQuery)) AddIt = false;
                                      break;
                              }
@@ -579,7 +505,6 @@ namespace BlueprintEditor2
                              BlueList.Items.Add(Elem);
                      });
                 });
-                Logger.Add("Finish init");
                 new Task(() =>
                 {
                     while (!status.IsCompleted) { }
@@ -598,7 +523,6 @@ namespace BlueprintEditor2
         GridViewColumn OldSortBy;
         private void GoSort(object sender, RoutedEventArgs e)
         {
-            Logger.Add("Sotring algoritm start");
             if (!(sender is GridViewColumn SortBy)) SortBy = ((GridViewColumnHeader)sender).Column;
             if (SortBy == null) return;
             string PropertyPatch = ((Binding)SortBy.DisplayMemberBinding).Path.Path.Replace("Text", "");
@@ -614,7 +538,6 @@ namespace BlueprintEditor2
                 NewDirection = OldDirection == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
             else
                 NewDirection = OldDirection;
-            Logger.Add($"Sort Blueprints by {PropertyPatch} in {NewDirection}");
             BlueList.Items.SortDescriptions.Clear();
             BlueList.Items.SortDescriptions.Add(new SortDescription(PropertyPatch, NewDirection));
             //BlueList.Items.SortDescriptions.Add(new SortDescription("Name", NewDirection));
@@ -632,7 +555,6 @@ namespace BlueprintEditor2
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Logger.Add($"Blueprints search '{Search.Text}' in '{SearchBy.Text}'");
             InitBlueprints();
             /*
             int x = 0;
@@ -645,12 +567,10 @@ namespace BlueprintEditor2
             {
                 Lock.Height = SystemParameters.PrimaryScreenHeight;
                 Lock.DataContext = 0;
-                Logger.Add("Show delete backups attention");
                 new MessageDialog(DialogPicture.warn, Lang.UnsafeAction, Lang.ItWillDeleteThisBackp, (Dial) =>
                 {
                     if (Dial == DialоgResult.Yes)
                     {
-                        Logger.Add("Delete blueprint backups");
                         if (Directory.Exists(CurrentBlueprint?.Patch + "\\Backups"))
                             Directory.Delete(CurrentBlueprint.Patch + "\\Backups", true);
                         BlueList_SelectionChanged(null, null);
@@ -660,46 +580,38 @@ namespace BlueprintEditor2
             }
             else
             {
-                Logger.Add("Try to delete blueprint backups, but blueprint not selected");
                 new MessageDialog(DialogPicture.attention, "Attention", Lang.SelectBlueForDelBack, null, DialogType.Message).Show();
             }
         }
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
         {
-            Logger.Add("Clear workshop cache");
             WorkshopCache.ClearMods();
         }
         private void MenuItem_Click_4(object sender, RoutedEventArgs e)
         {
-            Logger.Add("Creating world with cached mods");
             if (string.IsNullOrWhiteSpace(MySettings.Current.SavesPatch))
             {
-                Logger.Add("Saves patch not found");
                 new MessageDialog(DialogPicture.attention, "Saves patch not found", Lang.SPNF, null, DialogType.Message).Show();
                 return;
             }
             string mods = WorkshopCache.GetModsForWorld();
             new MessageDialog((x)=> {
-                Logger.Add($"World [{x}] created");
                 MyWorld.Create(x, mods);
             }, Lang.CreateWorld, Lang.EnterWorldNameForCreate).Show();
         }
         private void MenuItem_Click_5(object sender, RoutedEventArgs e)
         {
-            Logger.Add("Move cached blueprints to local");
             WorkshopCache.MoveBlueprintsToLocal();
             InitBlueprints();
         }
 
         private void InDev(object sender, RoutedEventArgs e)
         {
-            Logger.Add($"Show InDev message");
             new MessageDialog(DialogPicture.attention, "InDev", "This features in development, please wait for new version!", null, DialogType.Message).Show();
         }
 
         private void PrefabButton_Click(object sender, RoutedEventArgs e)
         {
-            Logger.Add("Prefab button pressed");
             new MessageDialog(DialogPicture.attention, "Experemental", "This experemental function, your prefab in file PrefabTest.xml.", (x) => {
                 File.WriteAllText("PrefabTest.xml", CurrentBlueprint.ConvertToPrefab());
             },DialogType.Message).Show();
@@ -708,7 +620,6 @@ namespace BlueprintEditor2
 
         private void MenuItem_Click_6(object sender, RoutedEventArgs e)
         {
-            Logger.Add("Open image converter");
             if (ImageConverter.Opened != null)
                 ImageConverter.Opened.Focus();
             else
@@ -717,7 +628,6 @@ namespace BlueprintEditor2
 
         private void MenuItem_Click_7(object sender, RoutedEventArgs e)
         {
-            Logger.Add("Open workshop downloader");
             if (WorkshopDownloader.Opened != null)
                 WorkshopDownloader.Opened.Focus();
             else

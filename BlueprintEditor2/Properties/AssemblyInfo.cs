@@ -19,7 +19,7 @@ using System.Windows;
 // Установка значения False для параметра ComVisible делает типы в этой сборке невидимыми
 // для компонентов COM. Если необходимо обратиться к типу в этой сборке через
 // COM, задайте атрибуту ComVisible значение TRUE для этого типа.
-[assembly: ComVisible(false)]
+[assembly: ComVisible(true)]
 
 //Чтобы начать создание локализуемых приложений, задайте
 //<UICulture>CultureYouAreCodingWith</UICulture> в файле .csproj
@@ -53,5 +53,5 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("0.1.0.12")]
 [assembly: AssemblyFileVersion("0.1.0.12")]
-[assembly: NeutralResourcesLanguage("")]
+[assembly: NeutralResourcesLanguage("en")]
 

@@ -29,7 +29,6 @@ namespace BlueprintEditor2
 
         public UpdateAvailable(string NewestVer,string updateLink, string git_ingo)
         {
-            Logger.Add("Update available show");
             InitializeComponent();
             window = this;
             UpdateLink = updateLink;
@@ -38,7 +37,6 @@ namespace BlueprintEditor2
             //UpdLoge = PrepareLog(MyExtensions.ApiServer(ApiServerAct.GetUpdateLog),Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName ,true);
             string updLog = "";
             string[] gVersions = git_ingo.Split(new string[] { @"},{""url"":" }, StringSplitOptions.RemoveEmptyEntries);
-            Logger.Add("Parse GitHub log");
             foreach (string gVer in gVersions) {
                 string vsi = MyExtensions.RegexMatch(gVer, @"""tag_name"":""([^""]*)""");
                 if (vsi == MyExtensions.Version) break;

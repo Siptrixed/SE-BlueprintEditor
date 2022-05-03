@@ -80,7 +80,6 @@ namespace BlueprintEditor2
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 //Monospace = SEImageConverter.ConvertToMonospace(Image.FromFile(openFileDialog.FileName), WideSize.IsChecked.Value ? 356 : 178, 178, Dithering.IsChecked.Value,out Image Resul);
-                Logger.Add($"Opening image \"{openFileDialog.FileName}\"");
                 DitherPic.Source = SEImageConverter.ToSource(System.Drawing.Image.FromFile(openFileDialog.FileName));
             }
             NormalizeForm();

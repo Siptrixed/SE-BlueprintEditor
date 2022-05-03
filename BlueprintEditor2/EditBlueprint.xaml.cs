@@ -37,13 +37,11 @@ namespace BlueprintEditor2
         bool ProgEditing = false;
         private void GridList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Logger.Add("Grid changing");
             //BlockList.Items.Clear();
             GridArmourType.IsEnabled = true;
             initGAT = false;
             if (GridList.SelectedIndex == -1) return;
             MyXmlGrid SlectedGrd = EdBlueprint.Grids[GridList.SelectedIndex];
-            Logger.Add($"Grid changed to {SlectedGrd.Name}");
             List<MyXmlBlock> TheBlocks = SlectedGrd.Blocks;
             int ArmorCount = 0;
             ExistedColors.Items.Clear();
@@ -132,7 +130,6 @@ namespace BlueprintEditor2
         }
         private void BlockList_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
-            Logger.Add("Block changed");
             ProgEditing = true;
             if (BlockList.SelectedItem != null)
             {
@@ -253,7 +250,6 @@ namespace BlueprintEditor2
                 NewDirection = OldDirection == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
             else
                 NewDirection = OldDirection;
-            Logger.Add($"Sort Blocks by {PropertyPatch} in {NewDirection}");
             MyXmlBlock[] Sort = BlockList.ItemsSource.OfType<MyXmlBlock>().ToArray();
             if (NewDirection != OldDirection || OldSortBy != SortBy || Resort)
             {
@@ -381,13 +377,11 @@ namespace BlueprintEditor2
         }
         private void DestructibleGridBox_Click(object sender, RoutedEventArgs e)
         {
-            Logger.Add($"Destructable changed to {DestructibleGridBox.IsChecked.Value}");
             EdBlueprint.Grids[GridList.SelectedIndex].Destructible = DestructibleGridBox.IsChecked.Value;
             //Console.WriteLine(EdBlueprint.Grids[GridList.SelectedIndex].Destructible);
         }
         private void GridSizeBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Logger.Add("Grid size changed");
             EdBlueprint.Grids[GridList.SelectedIndex].GridSize = (GridSizes)GridSizeBox.SelectedIndex;
         }
 
@@ -474,7 +468,6 @@ namespace BlueprintEditor2
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Logger.Add("Blueprint saved");
             EdBlueprint.Save();
             Close();
         }
@@ -497,7 +490,6 @@ namespace BlueprintEditor2
                 {
                 }
             }
-            Logger.Add("Editor closed");
         }
 
         private void ShareBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

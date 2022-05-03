@@ -158,7 +158,6 @@ namespace BlueprintEditor2
                     TypesList.Items.Add(x);
                 else
                     new MessageDialog(DialogPicture.warn, Lang.Type, Lang.TypeAlreadyExists, null, DialogType.Message).Show();
-                Logger.Add($"Replacer [{x}] created");
             }, Lang.AddItem, Lang.EnterTypeName).Show();
             
         }

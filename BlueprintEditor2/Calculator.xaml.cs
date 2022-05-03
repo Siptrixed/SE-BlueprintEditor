@@ -205,7 +205,6 @@ namespace BlueprintEditor2
                         string undef = calc.GetUndefined();
                         if (!string.IsNullOrEmpty(undef) && showWarn)
                         {
-                            Logger.Add("Undefined types message show");
                             new MessageDialog(DialogPicture.attention, "Attention", Lang.UndefinedTypesExists + "\r\n" + undef, null, DialogType.Message).Show();
                         }
                         StringBuilder shipInfo = new StringBuilder();
@@ -292,7 +291,6 @@ namespace BlueprintEditor2
                 }
                 catch { }
             if (calc != null) calc.Clear();
-            Logger.Add("Calculator closed");
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -322,7 +320,6 @@ namespace BlueprintEditor2
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Logger.Add("Copy to clipboard");
             /*int CompsL = 0;
             foreach (MyResourceInfo x in ComponensList.Items)
             {
