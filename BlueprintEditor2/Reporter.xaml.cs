@@ -6,6 +6,7 @@ using System.Linq;
 using System.Management;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -43,6 +44,9 @@ namespace BlueprintEditor2
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            //
+            //Process.Start($"mailto:siptrixed@gmail.com?subject=CrashReport&body="+ HttpUtility.UrlEncode($"Sender:+{Who.Text}\n\nComment:\n{What.Text}\n{File.ReadAllText("LastCrash.txt")}\n\nSettings:\n{(File.Exists("config.xml") ? File.ReadAllText("config.xml") : "File not exists")}".Replace("\r", "").Replace("\n", "")));
+            /* TODO: Make upload to issues or something
             var x = MyExtensions.ApiServer(ApiServerAct.Report, ApiServerOutFormat.@string,
                 ",\"body\":\"" + ("Crash Report:" +
                 "<br>Sender: " + Who.Text +
@@ -50,8 +54,8 @@ namespace BlueprintEditor2
                 "<br><br>Log:<br>" + File.ReadAllText("LastCrash.txt") +
                 "<br><br>PC: <br>" + GetPCInfo() +
                 "<br><br>Settings: <br>"+(File.Exists("config.xml") ? File.ReadAllText("config.xml").Replace("<", "&lt;") : "")
-                ).Replace("\n", "<br>").Replace("\r", "").Replace("\"", "'").Replace("\\", "\\\\") + "\"");
-            Button_Click(x, null);
+                ).Replace("\n", "<br>").Replace("\r", "").Replace("\"", "'").Replace("\\", "\\\\") + "\"");*/
+            Button_Click(this, null);
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -59,108 +63,5 @@ namespace BlueprintEditor2
             Application.Current.Shutdown();
         }
 
-        public string GetPCInfo()
-        {
-            return "Processor: " + GetProcessorInformation() + "<br>Video: " + GetVideoProcessorInformation() + "<br>Board: " + GetBoardProductId() + "<br>Disc: " + GetDisckModel() + "<br>Mem: " + GetPhysicalMemory() + "<br>OS: " + GetOSInformation();
-        }
-        public static string GetPhysicalMemory()
-        {
-            ManagementScope oMs = new ManagementScope();
-            ObjectQuery oQuery = new ObjectQuery("SELECT Capacity FROM Win32_PhysicalMemory");
-            ManagementObjectSearcher oSearcher = new ManagementObjectSearcher(oMs, oQuery);
-            ManagementObjectCollection oCollection = oSearcher.Get();
-
-            long MemSize = 0;
-            long mCap;
-
-            // In case more than one Memory sticks are installed
-            foreach (ManagementObject obj in oCollection)
-            {
-                mCap = Convert.ToInt64(obj["Capacity"]);
-                MemSize += mCap;
-            }
-            MemSize = (MemSize / 1024) / 1024;
-            return MemSize.ToString() + "MB";
-        }
-        public static string GetOSInformation()
-        {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem");
-            foreach (ManagementObject wmi in searcher.Get())
-            {
-                try
-                {
-                    return ((string)wmi["Caption"]).Trim() + ", " + (string)wmi["Version"] + ", " + (string)wmi["OSArchitecture"];
-                }
-                catch { }
-            }
-            return "BIOS Maker: Unknown";
-        }
-        public static string GetProcessorInformation()
-        {
-            ManagementClass mc = new ManagementClass("win32_processor");
-            ManagementObjectCollection moc = mc.GetInstances();
-            string info = String.Empty;
-            foreach (ManagementObject mo in moc)
-            {
-                string name = (string)mo["Name"];
-                name = name.Replace("(TM)", "™").Replace("(tm)", "™").Replace("(R)", "®").Replace("(r)", "®").Replace("(C)", "©").Replace("(c)", "©").Replace("    ", " ").Replace("  ", " ");
-
-                info = name + ", " + (string)mo["Caption"] + ", " + (string)mo["SocketDesignation"];
-                //mo.Properties["Name"].Value.ToString();
-                //break;
-            }
-            return info;
-        }
-        public static string GetVideoProcessorInformation()
-        {
-            ManagementClass mc = new ManagementClass("Win32_VideoController");
-            ManagementObjectCollection moc = mc.GetInstances();
-            string info = String.Empty;
-            foreach (ManagementObject mo in moc)
-            {
-                info = (string)mo["Caption"];
-            }
-            return info;
-        }
-        public static string GetBoardProductId()
-        {
-
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BaseBoard");
-
-            foreach (ManagementObject wmi in searcher.Get())
-            {
-                try
-                {
-                    return wmi.GetPropertyValue("Product").ToString();
-
-                }
-
-                catch { }
-
-            }
-
-            return "Product: Unknown";
-
-        }
-        public static string GetDisckModel()
-        {
-
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_DiskDrive");
-
-            foreach (ManagementObject wmi in searcher.Get())
-            {
-                try
-                {
-                    return wmi.GetPropertyValue("Model").ToString();
-
-                }
-
-                catch { }
-
-            }
-
-            return "Model: Unknown";
-
-        }
     }
 }

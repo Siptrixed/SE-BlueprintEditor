@@ -59,7 +59,7 @@ namespace BlueprintEditor2
 #endif
                 return;
             }
-            string Crash = Log.ToString()+"\r\nError:\r\n";
+            string Crash = Log.ToString()+ "|\r\n";
             Exception e = (Exception)UhEx.ExceptionObject;
             Crash += "Error message: " + e.Message;
             Crash += "\r\nSource: " + e.Source;

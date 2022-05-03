@@ -171,7 +171,7 @@ namespace BlueprintEditor2
                                         SelectBlueprint.window.BluePicture.Source = SelectBlueprint.window.CurrentBlueprint.GetPic();
                                         break;
                                     case DialоgResult.No:
-                                        Properties.Resources.thumbDefault.Save(Patch + "\\thumb.png");
+                                        Properties.Resources.blueprints_textures_00394054.Save(Patch + "\\thumb.png");
                                         SelectBlueprint.window.Lock.Height = 0;
                                         SelectBlueprint.window.BluePicture.Source = SelectBlueprint.window.CurrentBlueprint.GetPic();
                                         break;

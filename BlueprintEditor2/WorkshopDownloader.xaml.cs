@@ -67,13 +67,12 @@ namespace BlueprintEditor2
                     FileID = text.Split(new string[] { "id=" }, StringSplitOptions.RemoveEmptyEntries).Last().Split('&').First();
                     if (!long.TryParse(FileID, out long xss))
                         throw new Exception();
-                    aResponse = MyExtensions.ApiServer(
-                        ApiServerAct.SteamApiGetPublishedFileDetails,
-                        ApiServerOutFormat.@string,
-                        $",\"fileid\":\"{FileID}\",\"format\":\"xml\"");
-                    LoadLink = MyExtensions.RegexMatch(aResponse, @"<file_url>([^<]*)<\/file_url>");
-                    FileID = MyExtensions.RegexMatch(aResponse, @"<publishedfileid>([^<]*)<\/publishedfileid>");
-                    MatchCollection Tags = Regex.Matches(aResponse, @"<tag>([^<]*)<\/tag>");
+                    aResponse = MyExtensions.PostReq(
+                        "https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/",
+                        $"itemcount=1&publishedfileids[0]={FileID}");
+                    LoadLink = MyExtensions.RegexMatch(aResponse, @"\""file_url\""\:""([^""]*)""");
+                    FileID = MyExtensions.RegexMatch(aResponse, @"\""publishedfileid\""\:""([^""]*)""");
+                    MatchCollection Tags = Regex.Matches(aResponse, @"\""tag\""\:""([^""]*)""");
                     if (Tags.Count > 0) 
                         foreach (Match x in Tags)
                         {
@@ -107,7 +106,7 @@ namespace BlueprintEditor2
                     {
                         Title = "Workshop downloader - SE BlueprintEditor";
                         StatusLabel.Content = "";
-                        FileTitle = MyExtensions.RegexMatch(aResponse, @"<title>([^<]*)<\/title>");
+                        FileTitle = MyExtensions.RegexMatch(aResponse, @"\""title\""\:""([^""]*)""");
                         if (aResponse == null
                         || string.IsNullOrEmpty(FileTitle))
                         {
@@ -115,18 +114,18 @@ namespace BlueprintEditor2
                             DownloadProgress.IsIndeterminate = false;
                             return;
                         }
-                        long.TryParse(MyExtensions.RegexMatch(aResponse, @"<file_size>([^<]*)<\/file_size>"), out long file_size);
-                        if (MyExtensions.RegexMatch(aResponse, @"<consumer_app_id>([^<]*)<\/consumer_app_id>") != "244850")
+                        long.TryParse(MyExtensions.RegexMatch(aResponse, @"\""file_size\""\:([^,}]*)"), out long file_size);
+                        if (MyExtensions.RegexMatch(aResponse, @"\""consumer_app_id\""\:([^,}]*)") != "244850")
                         {
                             ItemInfo.Content = Lang.FileFromAnnotherGame;
                         }
                         else
                         {
-                            double.TryParse(MyExtensions.RegexMatch(aResponse, @"<time_updated>([^<]*)<\/time_updated>"), out double time_updated);
+                            double.TryParse(MyExtensions.RegexMatch(aResponse, @"\""time_updated\""\:([^,}]*)"), out double time_updated);
                             ItemInfo.Content = $"{Lang.Type}: {Type}\r\n{Lang.Size}: {file_size / 1024}kb\r\n{Lang.LastUpdate}: {MyExtensions.UnixTimestampToDateTime(time_updated)}";
                         }
                         ItemTitle.Text = FileTitle;
-                        string preview = MyExtensions.RegexMatch(aResponse, @"<preview_url>([^<]*)<\/preview_url>");
+                        string preview = MyExtensions.RegexMatch(aResponse, @"\""preview_url\""\:""([^""]*)""");
                         if (string.IsNullOrEmpty(preview))
                             preview = "https://steamcommunity-a.akamaihd.net/public/images/sharedfiles/steam_workshop_default_image.png";
                         FilePicture.Source = new BitmapImage(new Uri(preview, UriKind.RelativeOrAbsolute));
@@ -153,24 +152,28 @@ namespace BlueprintEditor2
                 {
                     try
                     {
-                        string ansv = MyExtensions.PostReq("https://api_02.steamworkshopdownloader.io/api/download/request",
-                            $"{{\"publishedFileId\":{FileID},\"collectionId\":null,\"extract\":false,\"hidden\":false,\"direct\":false,\"autodownload\":false}}");
+                        string ansv = MyExtensions.PostReq("https://node07.steamworkshopdownloader.io/prod/api/download/request",
+                            $"{{\"publishedFileId\":{FileID},\"collectionId\":null,\"extract\":false,\"hidden\":false,\"direct\":false,\"downloadFormat\":\"raw\",\"autodownload\":false}}");
                         var rgx = Regex.Match(ansv, "\"uuid\":\"([^\"]*)\"");
                         string uuid = rgx.Groups[1].Value;
                         string status, anssv;
                         do
                         {
-                            anssv = MyExtensions.PostReq("https://api_02.steamworkshopdownloader.io/api/download/status",
+                            anssv = MyExtensions.PostReq("https://node07.steamworkshopdownloader.io/prod/api/download/status",
                                 $"{{\"uuids\":[\"{uuid}\"]}}");
                             status = Regex.Match(anssv, "\"status\":\"([^\"]*)\"").Groups[1].Value;
                             string statusDesc = Regex.Match(anssv, "\"progressText\":\"([^\"]*)\"").Groups[1].Value;
                             MyExtensions.AsyncWorker(() => { StatusLabel.Content = statusDesc; });
                             Thread.Sleep(2000);
                         }
-                        while (status == "dequeued" || status == "retrieving");
+                        while (status != "transmitted" && status != "prepared");
                         Thread.Sleep(100);
-                        if(!string.IsNullOrEmpty(uuid))
-                            LoadLink = "https://api_02.steamworkshopdownloader.io/api/download/transmit?uuid=" + uuid;
+                        if (!string.IsNullOrEmpty(uuid))
+                        {
+                            var StorageNode = Regex.Match(anssv, "\"storageNode\":\"([^\"]*)\"").Groups[1].Value;
+                            var StorageFile = Regex.Match(anssv, "\"storagePath\":\"([^\"]*)\"").Groups[1].Value;
+                            LoadLink = $"https://{StorageNode}/prod//storage/{StorageFile}?uuid=" + uuid;
+                        }
                     }
                     catch { }
                 }

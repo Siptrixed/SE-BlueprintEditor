@@ -152,10 +152,25 @@ namespace BlueprintEditor2
                             try
                             {
                                 var Atrs = z.Attributes;
-                                int.TryParse(Atrs.GetNamedItem("x").Value, out int X);
-                                int.TryParse(Atrs.GetNamedItem("y").Value, out int Y);
-                                int.TryParse(Atrs.GetNamedItem("z").Value, out int Z);
-                                Size = new Vector3(X, Y, Z);
+                                if (Atrs.Count == 0)
+                                {
+                                    int X = 1, Y = 1, Z = 1;
+                                    foreach (XmlNode s in z.ChildNodes)
+                                        switch (s.Name)
+                                        {
+                                            case "X": int.TryParse(s.InnerText, out X); break;
+                                            case "Y": int.TryParse(s.InnerText, out Y); break;
+                                            case "Z": int.TryParse(s.InnerText, out Z); break;
+                                        }
+                                    Size = new Vector3(X, Y, Z);
+                                }
+                                else
+                                {
+                                    int.TryParse(Atrs.GetNamedItem("x").Value, out int X);
+                                    int.TryParse(Atrs.GetNamedItem("y").Value, out int Y);
+                                    int.TryParse(Atrs.GetNamedItem("z").Value, out int Z);
+                                    Size = new Vector3(X, Y, Z);
+                                }
                             }
                             catch
                             {

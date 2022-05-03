@@ -23,7 +23,7 @@ namespace BlueprintEditor2
             File.WriteAllText(Patch + "\\Sandbox.sbc", Properties.Resources.Sandbox.Replace("<!--NameHere-->", Name));
             File.WriteAllText(Patch + "\\SANDBOX_0_0_0_.sbs", Properties.Resources.SANDBOX_0_0_0_);
             File.WriteAllText(Patch + "\\Sandbox_config.sbc", Properties.Resources.Sandbox_config.Replace("<!--ModsHere-->", Mods));
-            Properties.Resources.thumbDefault.Save(Patch + "\\thumb.jpg");
+            Properties.Resources.blueprints_textures_00394054.Save(Patch + "\\thumb.jpg");
         }
     }
 }

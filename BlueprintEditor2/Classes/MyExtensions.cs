@@ -24,23 +24,6 @@ namespace BlueprintEditor2
     {
         public static string Version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         public static void AsyncWorker(Action act) => Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, act);
-        public static string ApiServer(ApiServerAct Actione, ApiServerOutFormat Formate = ApiServerOutFormat.@string, string JsonData = "")
-        {
-            try
-            {
-                using (var client = new System.Net.WebClient())
-                {
-                    string json = "{\"token\":\"J1H8MHUpN7N8BPZg9f9m6tf7NVHspVYo\",\"app\":\"SEBE2\",\"version\":\"" +
-                         Version + "\"" + JsonData + "}";
-                    client.Encoding = Encoding.UTF8;
-                    return client.UploadString("https://wsxz.ru/api/"+ Actione.ToString() + "/"+ Formate.ToString(),json);
-                }
-            }
-            catch
-            {
-                return "Error(Api unavailable)";
-            }
-        }
         public static string AppFile = System.Windows.Forms.Application.ExecutablePath;
         public static void CloseAllWindows()
         {
@@ -99,9 +82,15 @@ namespace BlueprintEditor2
             {
                 stream.Write(data, 0, data.Length);
             }
-
-            var response = (HttpWebResponse)request.GetResponse();
-
+            HttpWebResponse response;
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+            }
+            catch(WebException e)
+            {
+                response = (HttpWebResponse)e.Response;
+            }
             return new StreamReader(response.GetResponseStream()).ReadToEnd();
         }
         public static void QuickSort<T>(ref T[] a, Func<T, T, int> comparer) => QuickSort(ref a, 0, a.Length, comparer);
@@ -260,22 +249,6 @@ namespace BlueprintEditor2
                 return DColor.FromArgb(255, v, p, q);
         }
         #endregion
-    }
-    public enum ApiServerAct
-    {
-        CheckVersion,
-        GetUpdateLog,
-        GetCustomData,
-        Report, 
-        SteamApiGetPlayerSummaries,
-        SteamApiGetPublishedFileDetails
-    }
-    public enum ApiServerOutFormat
-    {
-        @string,
-        @bool,
-        json,
-        xml
     }
 
 }

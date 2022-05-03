@@ -84,40 +84,31 @@ namespace BlueprintEditor2
             {
                 Thread.CurrentThread.Name = "Updating";
                 Logger.Add("Check Update");
-                string[] Vers = MyExtensions.ApiServer(ApiServerAct.CheckVersion).Split(' ');
-                if (Vers.Length == 3 && Vers[0] == "0")
+                string downloadURL = null, lastVersion, git_ingo;
+                using (var client = new System.Net.WebClient())
                 {
-                    string downloadURL = null, lastVersion, git_ingo;
-                    using (var client = new System.Net.WebClient())
+                    client.Headers.Add("User-Agent", "SE-BlueprintEditor");
+                    client.Encoding = Encoding.UTF8;
+                    git_ingo = client.DownloadString("https://api.github.com/repos/Siptrixed/SE-BlueprintEditor/releases");
+                    lastVersion = MyExtensions.RegexMatch(git_ingo, @"""tag_name"":""([^""]*)""");
+                    downloadURL = MyExtensions.RegexMatch(git_ingo, @"""browser_download_url"":""([^""]*)""");
+                }
+                if (!string.IsNullOrEmpty(downloadURL))
+                {
+                    if (MyExtensions.CheckVersion(lastVersion, MyExtensions.Version))
                     {
-                        client.Headers.Add("User-Agent", "SE-BlueprintEditor");
-                        client.Encoding = Encoding.UTF8;
-                        git_ingo = client.DownloadString("https://api.github.com/repos/ScriptedEngineer/SE-BlueprintEditor/releases");
-                        lastVersion = MyExtensions.RegexMatch(git_ingo, @"""tag_name"":""([^""]*)""");
-                        downloadURL = MyExtensions.RegexMatch(git_ingo, @"""browser_download_url"":""([^""]*)""");
-                    }
-                    if (!string.IsNullOrEmpty(downloadURL))
-                    {
-                        if (MyExtensions.CheckVersion(lastVersion, MyExtensions.Version))
-                        {
-                            Logger.Add("Update found");
-                            MyExtensions.AsyncWorker(() => new UpdateAvailable(lastVersion, downloadURL, git_ingo).Show());
-                        }
-                        else
-                        {
-                            Logger.Add("Update not found on GitHub");
-                        }
+                        Logger.Add("Update found");
+                        MyExtensions.AsyncWorker(() => new UpdateAvailable(lastVersion, downloadURL, git_ingo).Show());
                     }
                     else
                     {
-                        Logger.Add("No have access to GitHub");
+                        Logger.Add("Update not found on GitHub");
                     }
                 }
                 else
                 {
-                    Logger.Add("Update not found on API");
+                    Logger.Add("No have access to GitHub");
                 }
-                //MyExtensions.AsyncWorker(() => new Dialog(x => Console.WriteLine(x), DialogPicture.attention, "TEST", "PleaseInput").Show());
             }).Start();
 #endif
             Logger.Add("Finish Init GUI");
@@ -731,6 +722,11 @@ namespace BlueprintEditor2
                 WorkshopDownloader.Opened.Focus();
             else
                 new WorkshopDownloader().Show();
+        }
+
+        private void Welcome_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

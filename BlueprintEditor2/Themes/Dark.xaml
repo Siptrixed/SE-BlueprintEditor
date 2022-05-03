@@ -19,8 +19,8 @@
     <SolidColorBrush x:Key="ControlDefaultBorderBrush"           Color="#FF4F4F4F" />
     <SolidColorBrush x:Key="ControlBrightDefaultBackground"      Color="#FF2A2A2A" />
     <SolidColorBrush x:Key="ControlBrightDefaultBorderBrush"     Color="#FF323232" />
-    <SolidColorBrush x:Key="ControlDisabledBackground"           Color="#FF383838" />
-    <SolidColorBrush x:Key="ControlDisabledBorderBrush"          Color="#FF494949" />
+    <SolidColorBrush x:Key="ControlDisabledBackground"           Color="#FF181818" />
+    <SolidColorBrush x:Key="ControlDisabledBorderBrush"          Color="#FF292929" />
     <SolidColorBrush x:Key="ControlMouseOverBackground"          Color="#FF353535" />
     <SolidColorBrush x:Key="ControlMouseOverBorderBrush"         Color="#FF505050"/>
     <SolidColorBrush x:Key="ControlSelectedBackground"           Color="#FF282828"/>
@@ -30,7 +30,7 @@
     <SolidColorBrush x:Key="ControlGlythColour"                  Color="#FFEBEBEB" />
     <SolidColorBrush x:Key="ControlMouseOverGlythColour"         Color="#FFD7D7D7" />
     <SolidColorBrush x:Key="ControlSelectedGlythColour"          Color="#FFC8C8C8" />
-    <SolidColorBrush x:Key="ControlDisabledGlythColour"          Color="#FFA0A0A0" />
+    <SolidColorBrush x:Key="ControlDisabledGlythColour"          Color="#FF808080" />
 
     <!-- Colourful theme  Colours -->
     <SolidColorBrush x:Key="ControlPrimaryColourBackground"          Color="#FF2084E8" />

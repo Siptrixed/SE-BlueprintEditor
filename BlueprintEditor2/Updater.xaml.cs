@@ -66,7 +66,7 @@ namespace BlueprintEditor2
         }
         public void DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            Process.Start(UpdaterPath, (MySettings.Current.Theme == MyThemeEnum.Dark? "/DarkTheme " : "")+ "/DownloadingFile \"" + Lang.DownloadUpdate + "\" /ExtractingUpdate \"" + Lang.ExtractingUpdate + "\" /PleaseWait \"" + Lang.PleaseWaitServers + "\" /GitHub \"ScriptedEngineer/SE-BlueprintEditor\" /RunApp \"" + MyExtensions.AppFile+"\" /JustDownload");
+            Process.Start(UpdaterPath, (MySettings.Current.Theme == MyThemeEnum.Dark? "/DarkTheme " : "")+ "/DownloadingFile \"" + Lang.DownloadUpdate + "\" /ExtractingUpdate \"" + Lang.ExtractingUpdate + "\" /PleaseWait \"" + Lang.PleaseWaitServers + "\" /GitHub \"Siptrixed/SE-BlueprintEditor\" /RunApp \"" + MyExtensions.AppFile+"\" /JustDownload");
             Application.Current.Shutdown();
         }
     }

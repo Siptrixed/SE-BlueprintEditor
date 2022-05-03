@@ -93,52 +93,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Microsoft.CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\PresentationCore.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\PresentationFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationFramework.Aero2">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\PresentationFramework.Aero2.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Drawing">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Drawing.dll</HintPath>
-    </Reference>
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Windows">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Windows.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows.Forms">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Windows.Forms.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\WindowsBase.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
     <Compile Include="About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
@@ -199,42 +155,6 @@
     <Compile Include="WorkshopDownloader.xaml.cs">
       <DependentUpon>WorkshopDownloader.xaml</DependentUpon>
     </Compile>
-    <Page Include="About.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BackupManager.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Calculator.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\MessageDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EditBlueprint.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ImageConverter.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ReplacersEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Reporter.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SelectBlueprint.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -245,30 +165,6 @@
       <DependentUpon>SelectBlueprint.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Settings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Dark.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Light.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UpdateAvailable.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Updater.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="WorkshopDownloader.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -301,12 +197,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Resource Include="Resource\img_292121.png" />
-    <Resource Include="Resource\img_1610640.png" />
-    <Resource Include="Resource\img_100000.png" />
-    <Resource Include="Resource\steam_icon_135152.png" />
-    <Resource Include="Resource\setts.png" />
-    <Resource Include="Resource\gyZddYCd3a8.png" />
     <Content Include="SESave\Sandbox.txt" />
     <Content Include="SESave\SANDBOX_0_0_0_.txt" />
     <Content Include="SESave\Sandbox_config.txt" />
@@ -315,36 +205,24 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\map-_1_.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\blueprints-textures_00394054.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\AndLogo.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\img_894.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\about.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\img_308586.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\attention.png" />
-    <Resource Include="Resource\question.png" />
-    <Resource Include="Resource\warn.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\img_252744.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\WhiteDot.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\img_354138.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
@@ -359,13 +237,50 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\img_284032.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\img_144440.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\92133ae17f4c9ec61407.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\Microsoft.CSharp.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\mscorlib.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\PresentationCore.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\PresentationFramework.Aero2.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\PresentationFramework.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Core.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Drawing.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.IO.Compression.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.IO.Compression.FileSystem.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Management.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Net.Http.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Numerics.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Runtime.Serialization.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Windows.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Windows.Forms.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Xaml.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Xml.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Xml.Linq.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\WindowsBase.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="F:\repos\SE-BlueprintEditor\BlueprintEditor2\obj\Debug\About.g.cs" />
+    <Compile Include="F:\repos\SE-BlueprintEditor\BlueprintEditor2\obj\Debug\BackupManager.g.cs" />
+    <Compile Include="F:\repos\SE-BlueprintEditor\BlueprintEditor2\obj\Debug\Calculator.g.cs" />
+    <Compile Include="F:\repos\SE-BlueprintEditor\BlueprintEditor2\obj\Debug\Dialogs\MessageDialog.g.cs" />
+    <Compile Include="F:\repos\SE-BlueprintEditor\BlueprintEditor2\obj\Debug\EditBlueprint.g.cs" />
+    <Compile Include="F:\repos\SE-BlueprintEditor\BlueprintEditor2\obj\Debug\ImageConverter.g.cs" />
+    <Compile Include="F:\repos\SE-BlueprintEditor\BlueprintEditor2\obj\Debug\ReplacersEditor.g.cs" />
+    <Compile Include="F:\repos\SE-BlueprintEditor\BlueprintEditor2\obj\Debug\Reporter.g.cs" />
+    <Compile Include="F:\repos\SE-BlueprintEditor\BlueprintEditor2\obj\Debug\SelectBlueprint.g.cs" />
+    <Compile Include="F:\repos\SE-BlueprintEditor\BlueprintEditor2\obj\Debug\Settings.g.cs" />
+    <Compile Include="F:\repos\SE-BlueprintEditor\BlueprintEditor2\obj\Debug\Themes\Dark.g.cs" />
+    <Compile Include="F:\repos\SE-BlueprintEditor\BlueprintEditor2\obj\Debug\UpdateAvailable.g.cs" />
+    <Compile Include="F:\repos\SE-BlueprintEditor\BlueprintEditor2\obj\Debug\Updater.g.cs" />
+    <Compile Include="F:\repos\SE-BlueprintEditor\BlueprintEditor2\obj\Debug\WorkshopDownloader.g.cs" />
+    <Compile Include="F:\repos\SE-BlueprintEditor\BlueprintEditor2\obj\Debug\App.g.cs" />
+    <Compile Include="F:\repos\SE-BlueprintEditor\BlueprintEditor2\obj\Debug\SE-BlueprintEditor_Content.g.cs" />
+  </ItemGroup>
 </Project>
